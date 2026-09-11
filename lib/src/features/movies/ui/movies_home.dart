@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.deepPurpleAccent,
+          backgroundColor: const Color.fromARGB(255, 91, 24, 172),
           title: const Text('User', style: TextStyle(color: Colors.white),),
           bottom: const TabBar(
             tabs: <Widget>[
