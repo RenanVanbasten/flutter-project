@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!mounted) return;
 
     if (success) {
-      context.go('/home');
+      context.go('/home', extra: _loginController.user.value);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(_loginController.error ?? 'Erro desconhecido')),

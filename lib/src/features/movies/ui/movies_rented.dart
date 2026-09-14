@@ -18,12 +18,12 @@ class MoviesRented extends SignalWidget {
 
   @override
   Widget build(BuildContext context) {
-    final movies = controller.availableMovies.value;
-    final isLoading = controller.isLoading;
+    final movies = controller.rentalMovies.value;
     final error = controller.error;
-
-    if (isLoading && movies.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+    if (movies.isEmpty) {
+      return const Center(
+      child: Text('Nenhum filme alugado ainda.',
+      style: TextStyle(color: Colors.white),),);
     }
 
     if (error != null && movies.isEmpty) {
@@ -42,51 +42,54 @@ class MoviesRented extends SignalWidget {
       );
     }
 
-    if (movies.isEmpty) {
-      return const Center(child: Text('Nenhum filme disponível no momento.'));
-    }
 
-    return GridView.builder(
+     return Container(
+      color: const Color.fromARGB(255, 44, 1, 52),
+      child: GridView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: movies.length,
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemBuilder: (_, int index) {
-        final movie = movies[index];
-
-        return InkWell(
-          onTap: () => onTap?.call(movie),
-          onLongPress: () => onLongPress?.call(movie),
-          child: GridTile(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: movie.cover.isNotEmpty
-                      ? Image.memory(
-                          Uint8List.fromList(movie.cover),
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => const Icon(Icons.broken_image, size: 50),
-                        )
-                      : const Icon(Icons.movie, size: 50),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    movie.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis,
+      maxCrossAxisExtent: 250,
+      childAspectRatio: 0.75,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+),
+  itemBuilder: (_, int index) {
+    final movie = movies[index];
+    return InkWell(onTap: () => onTap?.call(movie),
+    onLongPress: () => onLongPress?.call(movie),
+    child: GridTile(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 50, 5, 58),
+              borderRadius: BorderRadius.circular(16.0),
+              border: Border.all(color: Colors.white, width: 1.0),
+              ),child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ClipRRect(borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
+                    child: movie.cover.isNotEmpty
+                    ? Image.memory(
+                      Uint8List.fromList(movie.cover),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      errorBuilder: (_, _, _) => const Icon(Icons.broken_image, size: 50, color: Colors.white),
+                      ): const Icon(Icons.movie, size: 50, color: Colors.white),
+                    ),),
+                    Padding( padding: const EdgeInsets.all(8.0),
+                    child: Text( movie.title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, ),
+                    ),
+                   ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
+           );
+         }
+     )
     );
   }
 }

@@ -3,9 +3,15 @@ import 'package:movies_flutter_rvtc/src/core/di/injection.dart';
 import 'package:movies_flutter_rvtc/src/features/movies/controller/movies_controller.dart';
 import 'package:movies_flutter_rvtc/src/features/movies/ui/movies_list.dart';
 import 'package:movies_flutter_rvtc/src/features/movies/ui/movies_rented.dart';
+import 'package:movies_flutter_rvtc/src/shared/proto/user_movies.pb.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({
+  // receber usuario como arg
+  final User user;
+  
+
+
+  const HomePage(this.user, {
     super.key,
   });
 
@@ -14,6 +20,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MoviesController moviesController = getIt();
+    moviesController.initUser(user);
 
     return DefaultTabController(
       initialIndex: 0,

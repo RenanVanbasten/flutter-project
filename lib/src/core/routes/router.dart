@@ -15,7 +15,10 @@ final router = GoRouter(
       builder: (context, state) => LoginPage(),),
       GoRoute(
       path: "/home",
-      builder: (context, state) => HomePage(),),
+      builder: (context, state) {
+        final user = state.extra as User;
+        return  HomePage(user);
+      },),
       GoRoute(
       path: "/info",
       builder: (context, state) {

@@ -1,4 +1,3 @@
-import 'package:movies_flutter_rvtc/src/features/login/controller/login_controller.dart';
 import 'package:movies_flutter_rvtc/src/features/movies/data/repositories/movies_repository.dart';
 import 'package:movies_flutter_rvtc/src/shared/proto/user_movies.pb.dart';
 import 'package:signals/signals_flutter.dart';
@@ -6,9 +5,8 @@ import 'package:signals/signals_flutter.dart';
 
 class MoviesController {
   final MoviesRepository moviesRepository;
-  final LoginController _loginController;
 
-  MoviesController(this.moviesRepository, this._loginController) {
+  MoviesController(this.moviesRepository) {
     getAvailableMovies();
   }
 
@@ -16,9 +14,14 @@ class MoviesController {
   final _error = signal<String?>(null);
   final availableMovies = signal<List<Movie>>([]);
   final rentalMovies = signal<List<Movie>>([]);
-
+  final user = signal<User?>(null);
   bool get isLoading => _isLoading.value;
   String? get error => _error.value;
+
+
+    void initUser(User authenticatedUser) {
+    user.value = authenticatedUser;
+  }
 
   Future<void> getAvailableMovies() async {
     try {
@@ -35,10 +38,10 @@ class MoviesController {
   }
 
   Future<void> getRentalMovie() async {
-    final loggedUser = _loginController.user.value;
+    final loggedUser = user.value;
 
     if (loggedUser == null) {
-      _error.value = 'Usuário não  loggado';
+      _error.value = 'Usuário não loggado';
       return;
     }
 
@@ -61,7 +64,7 @@ class MoviesController {
   }
 
   Future<bool> rentalMovie(int movieId) async {
-    final loggedUser = _loginController.user.value;
+    final loggedUser = user.value;
 
     if (loggedUser == null) {
       _error.value = 'Usuário não loggado';
@@ -88,7 +91,7 @@ class MoviesController {
   }
 
   Future<bool> watchMovie(Movie movie) async {
-    final loggedUser = _loginController.user.value;
+    final loggedUser = user.value;
 
     if (loggedUser == null) {
       _error.value = 'Usuário não loggado';

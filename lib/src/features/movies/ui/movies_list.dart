@@ -47,52 +47,63 @@ class MoviesList extends SignalWidget {
       return const Center(child: Text('Nenhum filme disponível no momento.'));
     }
 
-    // Adicionado Container com cor de fundo roxa
-    return Container(
-      color: const Color.fromARGB(255, 44, 1, 52), // Você também pode usar Colors.purple.shade900 para um roxo mais escuro
+     return Container(
+      color: const Color.fromARGB(255, 44, 1, 52),
       child: GridView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: movies.length,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 0.7,
-          crossAxisSpacing: 8,
+          maxCrossAxisExtent: 250,
+          childAspectRatio: 0.65,
+          crossAxisSpacing: 2,
           mainAxisSpacing: 8,
         ),
         itemBuilder: (_, int index) {
           final movie = movies[index];
           return InkWell(
             onTap: () {
-              context.go('/info', extra: movie);
+              context.push('/info', extra: movie);
             },
             onLongPress: () => onLongPress?.call(movie),
             child: GridTile(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: movie.cover.isNotEmpty
-                        ? Image.memory(
-                            Uint8List.fromList(movie.cover),
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) =>
-                                const Icon(Icons.broken_image, size: 50),
-                          )
-                        : const Icon(Icons.movie, size: 50),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      movie.title,
-                      // Alterado para branco para dar contraste com o fundo roxo
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, 
-                      ),
-                      overflow: TextOverflow.ellipsis,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 50, 5, 58),
+                    borderRadius: BorderRadius.circular(16.0),
+                    border: Border.all(
+                      color: Colors.white, 
+                      width: 1.0,      
                     ),
                   ),
-                ],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ClipRRect( 
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
+                          child: movie.cover.isNotEmpty
+                              ? Image.memory(
+                                  Uint8List.fromList(movie.cover),
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  errorBuilder: (_, _, _) =>
+                                      const Icon(Icons.broken_image, size: 50, color: Colors.white),
+                                )
+                              : const Icon(Icons.movie, size: 50, color: Colors.white),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "R\$ ${movie.value.toStringAsFixed(2)}", 
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           );

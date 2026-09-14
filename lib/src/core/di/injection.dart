@@ -19,6 +19,6 @@ void configureDependencies(){
 
   getIt.registerFactory(() => MoviesRepository(getIt ()));
   getIt.registerFactory(() => MoviesDatasource(getIt ()));
-  getIt.registerSingleton<MoviesController>(MoviesController(getIt(), getIt()));
+  getIt.registerSingleton<MoviesController>(MoviesController(getIt()));
 
 }
